@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
-function Nav() {
+function Nav({ link, url }) {
   return (
     <NavBar className="falign">
       <Logo />
       <button>
-        <Link to="/login">Login</Link>
+        <Link to={url}>{link}</Link>
       </button>
     </NavBar>
   );
@@ -16,10 +16,8 @@ function Nav() {
 export default Nav;
 const NavBar = styled.nav`
   background-color: #333351;
-
   overflow: hidden;
   height: 65px;
-  box-shadow: 0px 1px 6px grey;
   justify-content: space-between;
   padding-right: 30px;
   button {

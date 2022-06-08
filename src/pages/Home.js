@@ -5,7 +5,7 @@ import Nav from "../components/Nav";
 const Home = () => {
   return (
     <>
-      <Nav />
+      <Nav url={"/login"} link={"Login"} />
       <HomeWrapper className="f">
         <section className="a fcenter">
           <div className="content">
@@ -69,6 +69,7 @@ export default Home;
 const HomeWrapper = styled.main`
   flex-direction: column;
   padding-top: 20px;
+  box-shadow: 0px -1px 6px grey;
   background-color: #333351;
   color: white;
   .a {
@@ -173,7 +174,6 @@ const HomeWrapper = styled.main`
       animation: fade 6s linear infinite;
       width: 100%;
       height: 100%;
-      /* opacity: 1; */
     }
     @keyframes fade {
       30% {
@@ -315,5 +315,3 @@ const HomeWrapper = styled.main`
     }
   }
 `;
-/* @media screen and (min-width: 565px) {
-    } */

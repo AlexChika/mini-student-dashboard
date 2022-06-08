@@ -1,13 +1,15 @@
 import { createGlobalStyle } from "styled-components";
 const Theme = {
   Light: {
-    // bg: "#333351",
+    kodecamp: "#333351",
     bg: "#d9d9d9",
     color: "black",
+    secBg: "white",
   },
   Dark: {
-    bg: "white",
+    bg: "grey",
     color: "white",
+    secBg: "black",
   },
 };
 const GlobalStyle = createGlobalStyle`
