@@ -5,6 +5,7 @@ import { Theme, GlobalStyle } from "./utils/themes";
 // pages
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
 function App() {
   const { appState } = GlobalContext();
   const { theme } = appState;
@@ -20,6 +21,7 @@ function App() {
       <HashRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </HashRouter>
