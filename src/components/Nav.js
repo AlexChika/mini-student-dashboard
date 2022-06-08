@@ -15,6 +15,8 @@ function Nav() {
 
 export default Nav;
 const NavBar = styled.nav`
+  background-color: #333351;
+
   overflow: hidden;
   height: 65px;
   box-shadow: 0px 1px 6px grey;

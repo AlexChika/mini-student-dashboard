@@ -68,11 +68,14 @@ const Home = () => {
 export default Home;
 const HomeWrapper = styled.main`
   flex-direction: column;
-  margin-top: 20px;
+  padding-top: 20px;
+  background-color: #333351;
   color: white;
-  .a,
+  .a {
+    height: calc(100vh - 90px);
+  }
   .b {
-    height: calc(100vh - 85px);
+    height: calc(70vh);
   }
   .a {
     .content {
@@ -166,8 +169,20 @@ const HomeWrapper = styled.main`
       }
     }
     img {
+      position: relative;
+      animation: fade 6s linear infinite;
       width: 100%;
       height: 100%;
+      /* opacity: 1; */
+    }
+    @keyframes fade {
+      30% {
+        opacity: 0;
+      }
+      60%,
+      100% {
+        opacity: 1;
+      }
     }
   }
   @media screen and (min-width: 465px) {
@@ -235,6 +250,10 @@ const HomeWrapper = styled.main`
   }
   @media screen and (min-width: 768px) {
     flex-direction: row;
+    .a,
+    .b {
+      height: calc(100vh - 85px);
+    }
     .a {
       width: 60%;
       .content {

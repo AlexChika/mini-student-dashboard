@@ -12,6 +12,7 @@ const Login = () => {
 export default Login;
 const LoginWrapper = styled.main`
   color: white;
+  /* background: white; */
 `;
 /* border: 2px solid white; */
 /* border: 2px solid red; */

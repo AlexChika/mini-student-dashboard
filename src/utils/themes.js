@@ -1,12 +1,13 @@
 import { createGlobalStyle } from "styled-components";
 const Theme = {
   Light: {
-    // bg: "#ffffff",
-    // bg: "#40405c",
-    bg: "#333351",
+    // bg: "#333351",
+    bg: "#d9d9d9",
+    color: "black",
   },
   Dark: {
-    bg: "grey",
+    bg: "white",
+    color: "white",
   },
 };
 const GlobalStyle = createGlobalStyle`
@@ -17,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
   padding: 0;
   box-sizing: border-box;
   list-style:none;
+  transition: all 0.3s linear;
 }
 button,input{
 border:none;
