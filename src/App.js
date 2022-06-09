@@ -2,10 +2,14 @@ import { GlobalContext } from "./utils/Context";
 import { ThemeProvider } from "styled-components";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { Theme, GlobalStyle } from "./utils/themes";
-// pages
+// pages folder
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import Courses from "./pages/Courses";
+// component folder
+import DashboardIndex from "./components/DashboardIndex";
 function App() {
   const { appState } = GlobalContext();
   const { theme } = appState;
@@ -22,7 +26,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="courses" element={<Courses />} />
+            <Route path="profile" element={<Profile />} />
+            <Route index element={<DashboardIndex />} />
+          </Route>
         </Routes>
       </HashRouter>
     </ThemeProvider>

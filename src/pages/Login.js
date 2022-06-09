@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import Nav from "../components/Nav";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const navigate = useNavigate();
+  const loginHandler = () => {
+    navigate("/dashboard");
+  };
   return (
     <>
       <Nav url={"/"} link={"Home"} />
@@ -56,7 +61,7 @@ const Login = () => {
                 </label>
               </div>
               <div className="formControl">
-                <button className="mt30" type="submit">
+                <button onClick={loginHandler} className="mt30" type="submit">
                   Login
                 </button>
               </div>
@@ -164,6 +169,7 @@ const LoginWrapper = styled.main`
     width: 15em;
     background-color: white;
     padding: 10px 20px;
+    color: grey;
   }
   @media screen and (min-width: 768px) {
     .container {
@@ -176,11 +182,3 @@ const LoginWrapper = styled.main`
     }
   }
 `;
-/* border: 2px solid white; */
-// font: italic bold 18px Arial, sans-serif;
-
-/* border: 2px solid red; */
-/* background: url(${require("../Assets/boysmall.png")});
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: right center -100px; */
