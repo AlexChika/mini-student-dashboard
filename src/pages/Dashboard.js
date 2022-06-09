@@ -6,7 +6,7 @@ import Logo from "../components/Logo";
 const Dashboard = () => {
   const { dispatch } = GlobalContext();
   const { pathname } = useLocation();
-  const [sideBar, setSideBar] = useState(true);
+  const [sideBar, setSideBar] = useState(false);
   const url = pathname.split("/");
   let isDashboard = url[url.length - 1];
   const handleTheme = () => {
@@ -69,6 +69,14 @@ const Dashboard = () => {
         {/* <button onClick={handleTheme}>click me</button> */}
       </section>
       <section className="content">
+        <button
+          onClick={() => setSideBar(!sideBar)}
+          className={`navigation ${sideBar ? "hide" : ""}`}
+        >
+          <span className="icon">
+            <i className="bi bi-list"></i>{" "}
+          </span>
+        </button>
         <Outlet />
       </section>
     </DashboardWrapper>
@@ -94,6 +102,16 @@ const DashboardWrapper = styled.main`
     font-size: 30px;
     animation: blink 2s linear infinite;
   }
+  .navigation {
+    position: fixed;
+    color: ${(props) => props.theme.color};
+    top: 10px;
+    font-size: 30px;
+    color: chocolate;
+  }
+  .navigation.hide {
+    display: none;
+  }
   @keyframes blink {
     50% {
       color: tomato;
@@ -101,11 +119,10 @@ const DashboardWrapper = styled.main`
   }
   .sideBar {
     background: ${(props) => props.theme.kodecamp};
+    transform: translateX(0px);
     border-top-right-radius: 50px;
-    max-width: 500px;
-    width: 30%;
-    min-width: 300px;
-    position: sticky;
+    width: 100%;
+    position: fixed;
     height: 100vh;
     top: 0;
     left: 0;
@@ -149,6 +166,7 @@ const DashboardWrapper = styled.main`
     }
   }
   .sideBar.close {
+    transform: translateX(-100%);
     width: 120px;
     min-width: 120px;
     .linkCon {
@@ -166,5 +184,33 @@ const DashboardWrapper = styled.main`
     ); */
     overflow-y: auto;
     width: 100%;
+  }
+  @media screen and (min-width: 548px) {
+    .sideBar {
+      max-width: 500px;
+      width: 80%;
+      min-width: 300px;
+    }
+  }
+  @media screen and (min-width: 768px) {
+    .navigation {
+      display: none;
+    }
+    .sideBar {
+      max-width: 500px;
+      width: 30%;
+      min-width: 300px;
+      position: sticky;
+    }
+    .sideBar.close {
+      transform: translateX(0px);
+      width: 120px;
+      min-width: 120px;
+      .linkCon {
+        .text {
+          display: none;
+        }
+      }
+    }
   }
 `;
