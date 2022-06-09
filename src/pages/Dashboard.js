@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { GlobalContext } from "../utils/Context";
 import { Outlet, NavLink, useLocation, Link } from "react-router-dom";
@@ -12,6 +12,9 @@ const Dashboard = () => {
   const handleTheme = () => {
     dispatch({ type: "THEME" });
   };
+  useEffect(() => {
+    document.title = "Dashboard | Light Academy";
+  }, []);
   return (
     <DashboardWrapper className="f">
       <section className={`sideBar ${sideBar ? "" : "close"}`}>

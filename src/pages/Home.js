@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Nav from "../components/Nav";
 const Home = () => {
+  useEffect(() => {
+    document.title = "Light Academy";
+  }, []);
   return (
     <>
       <Nav url={"/login"} link={"Login"} />

@@ -1,12 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Nav from "../components/Nav";
 import { useNavigate } from "react-router-dom";
+// fire Base
+import { app, auth } from "../utils/firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 const Login = () => {
   const navigate = useNavigate();
-  const loginHandler = () => {
+  const provider = new GoogleAuthProvider();
+  const [userDetails, setUserDetails] = useState({ email: "", password: "" });
+  const handleLoginDetails = (e) => {
+    e.preventDefault();
     navigate("/dashboard");
+    return;
+    signInWithEmailAndPassword(auth, userDetails.email, userDetails.password)
+      .then((response) => {
+        const user = response.user;
+        console.log(user);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    console.log(userDetails);
   };
+  const loginHandler = () => {
+    // navigate("/dashboard");
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        console.log(token);
+        // The signed-in user info.
+        const user = result.user;
+        console.log(user);
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+    console.log("Auth with google");
+  };
+  useEffect(() => {
+    document.title = "Login | Light Academy";
+  }, []);
+
   return (
     <>
       <Nav url={"/"} link={"Home"} />
@@ -30,13 +80,17 @@ const Login = () => {
               />
               <span className="logoText">Light Academy</span>
             </div>
-            <form>
+            <form onSubmit={handleLoginDetails}>
               <div className="formControl">
                 <label htmlFor="email">
                   <input
+                    onChange={(e) =>
+                      setUserDetails({ ...userDetails, email: e.target.value })
+                    }
                     placeholder="Enter a correct email"
                     type="email"
-                    name=""
+                    required
+                    value={userDetails.email}
                     id="email"
                   />
                   <span>
@@ -50,10 +104,17 @@ const Login = () => {
               <div className="formControl">
                 <label htmlFor="password">
                   <input
-                    placeholder="Please enter correct email"
+                    onChange={(e) =>
+                      setUserDetails({
+                        ...userDetails,
+                        password: e.target.value,
+                      })
+                    }
+                    placeholder="Please enter correct password"
                     type="text"
-                    name=""
+                    value={userDetails.password}
                     id="passsword"
+                    required
                   />
                   <span>
                     <img src={require("../Assets/key.png")} alt=" key icon" />
@@ -61,7 +122,11 @@ const Login = () => {
                 </label>
               </div>
               <div className="formControl">
-                <button onClick={loginHandler} className="mt30" type="submit">
+                <button
+                  onClick={handleLoginDetails}
+                  className="mt30"
+                  type="submit"
+                >
                   Login
                 </button>
               </div>
@@ -71,10 +136,10 @@ const Login = () => {
         <span style={{ color: "grey", fontSize: "20px" }} className="mt30">
           Or
         </span>
-        <div className="google mt30 mb30 f">
-          <button>Continue with Google</button>
+        <button onClick={loginHandler} className="google mt30 mb30 f">
+          <span>Continue with Google</span>
           <img src={require("../Assets/google.png")} alt=" google icon" />
-        </div>
+        </button>
       </LoginWrapper>
     </>
   );
@@ -166,9 +231,9 @@ const LoginWrapper = styled.main`
   .google {
     justify-content: space-between;
     align-items: center;
-    width: 15em;
+    width: 15.5em;
     background-color: white;
-    padding: 10px 20px;
+    padding: 10px 10px;
     color: grey;
   }
   @media screen and (min-width: 768px) {
