@@ -1,19 +1,65 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { GlobalContext } from "../utils/Context";
-import { Outlet, NavLink, useLocation, Link } from "react-router-dom";
+import {
+  Outlet,
+  NavLink,
+  useLocation,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import Logo from "../components/Logo";
+import Modal from "../components/Modal";
+import { statusText } from "../utils/utils";
 const Dashboard = () => {
-  const { dispatch } = GlobalContext();
+  const navigate = useNavigate();
+  const { logout, appState, dispatch } = GlobalContext();
+  const { currentUser } = appState;
   const { pathname } = useLocation();
   const [sideBar, setSideBar] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [status, setStatus] = useState({ text1: "", text2: "" });
   const url = pathname.split("/");
   let isDashboard = url[url.length - 1];
-  const handleTheme = () => {
-    dispatch({ type: "THEME" });
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+    }
+  }, []);
+  const handleLogout = async () => {
+    setStatus({
+      text1: statusText.logoutWaiting1,
+      text2: "",
+    });
+    setModal(true);
+    try {
+      await logout();
+      dispatch({ type: "NO_USER" });
+      setModal(true);
+      setStatus({
+        text1: statusText.logoutSuccess1,
+        text2: "",
+      });
+      navigate("/");
+    } catch (error) {
+      setStatus({
+        text1: error.message,
+        text2: "Please Try Again",
+      });
+      setModal(true);
+    }
   };
+  // const handleTheme = () => {
+  //   dispatch({ type: "THEME" });
+  // };
   return (
     <DashboardWrapper className="f">
+      <Modal modal={modal} setModal={setModal}>
+        <div style={{ textAlign: "center", padding: "20px" }}>
+          <h1 className="mb10">{status.text1}</h1>
+          <h2>{status.text2}</h2>
+        </div>
+      </Modal>
       <section className={`sideBar ${sideBar ? "" : "close"}`}>
         <span onClick={() => setSideBar(!sideBar)} className="arrow">
           {sideBar ? (
@@ -60,12 +106,12 @@ const Dashboard = () => {
             </span>
             <span className="text">Profile</span>
           </NavLink>
-          <NavLink to="/">
+          <a style={{ cursor: "pointer" }} onClick={handleLogout}>
             <span className="icon">
               <i className="bi bi-box-arrow-in-right"></i>
             </span>
             <span className="text">Logout</span>
-          </NavLink>
+          </a>
         </div>
         {/* <button onClick={handleTheme}>click me</button> */}
       </section>
