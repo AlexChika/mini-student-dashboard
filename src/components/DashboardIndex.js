@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-
+import { Link } from "react-router-dom";
 const DashboardIndex = () => {
   useEffect(() => {
     document.title = "Dashboard | Light Academy";
@@ -13,6 +13,9 @@ const DashboardIndex = () => {
           <div>
             <h1>Welcome Back</h1>
             <h2>Alex Chika</h2>
+          </div>
+          <div>
+            <Link to="/dashboard/courses">Continue Learning</Link>
           </div>
         </div>
         <div className="b">
@@ -56,6 +59,13 @@ const DashboardIndexWrapper = styled.main`
       }
       h2 {
         font-size: 30px;
+      }
+      a {
+        display: block;
+        width: 280px;
+        padding: 15px 0px;
+        background: skyblue;
+        border-radius: 20px;
       }
     }
     .a,

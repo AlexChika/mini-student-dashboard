@@ -78,12 +78,11 @@ const SingleCourseWrapper = styled.main`
       .desc p {
         text-align: center;
         padding: 10px;
-        line-height: 50px;
+        line-height: 30px;
         letter-spacing: 3.5px;
         margin: 0 auto;
         font-style: italic;
         font-size: 14px;
-        /* font: italic bold 14px Arial, sans-serif; */
       }
     }
     .b {
@@ -124,6 +123,7 @@ const SingleCourseWrapper = styled.main`
       .a {
         .desc p {
           font-size: 18px;
+          line-height: 50px;
         }
       }
     }
