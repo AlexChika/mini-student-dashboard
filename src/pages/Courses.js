@@ -13,13 +13,19 @@ const Courses = () => {
         <h1 className="heading">Your Courses</h1>
         <div className="courses">
           {course.map((course) => {
-            const { name, id } = course;
+            const { name, id, img } = course;
             return (
               <Link
                 to={`/dashboard/courses/${name}+${id}`}
-                className="subjects"
+                className="subjects fcenter"
+                key={id}
               >
-                {name}
+                <div>
+                  <h1 className="mb20">{name}</h1>
+                  <span className="fcenter">
+                    <img src={img} alt={name} />
+                  </span>
+                </div>
               </Link>
             );
           })}
@@ -65,8 +71,22 @@ const CoursesWrapper = styled.main`
     gap: 2em;
   }
   .subjects {
+    h1 {
+      font-size: 30px;
+      color: white;
+      text-shadow: 1px 1px 3px grey;
+    }
+    span {
+      padding: 10px;
+      border: 2px solid white;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto;
+    }
     border-radius: 20px;
     width: 100%;
+    text-align: center;
   }
   .subjects:nth-of-type(1) {
     background-color: #ff826c;
@@ -75,7 +95,7 @@ const CoursesWrapper = styled.main`
     background-color: skyblue;
   }
   .subjects:nth-of-type(3) {
-    background-color: #ffff80;
+    background-color: #ffffa6;
   }
   .subjects:nth-of-type(4) {
     background-color: #a6a6ff;

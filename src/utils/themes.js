@@ -75,10 +75,10 @@ body{
 .mb30{
     margin-bottom:30px;
 }
-.mtb0{
+.mb20{
     margin-bottom:20px;
 }
-.mtb0{
+.mb10{
     margin-bottom:10px;
 }
 .fwh{
