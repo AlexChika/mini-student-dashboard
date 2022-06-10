@@ -18,7 +18,7 @@ const SingleCourse = () => {
           <div className="a">
             <h2 className="font heading">Description</h2>
             <div className="desc">
-              <p className="font1">{subject.details.intro}</p>
+              <p>{subject.details.intro}</p>
             </div>
           </div>
           <div className="b">
@@ -32,6 +32,7 @@ const SingleCourse = () => {
         </section>
         <div className="footer font">
           <p>COURSE ID {id}</p>
+          <button className="mt30 mb30">Enroll Now </button>
         </div>
       </section>
     </SingleCourseWrapper>
@@ -58,10 +59,6 @@ const SingleCourseWrapper = styled.main`
     text-align: center;
     font: italic bold 22px Arial, sans-serif;
   }
-  .font1 {
-    text-align: center;
-    font: italic bold 18px Arial, sans-serif;
-  }
   .body {
     width: 98%;
     margin: 0 auto;
@@ -79,10 +76,14 @@ const SingleCourseWrapper = styled.main`
     .a {
       padding: 10px;
       .desc p {
-        width: 90%;
+        text-align: center;
+        padding: 10px;
         line-height: 50px;
         letter-spacing: 3.5px;
         margin: 0 auto;
+        font-style: italic;
+        font-size: 14px;
+        /* font: italic bold 14px Arial, sans-serif; */
       }
     }
     .b {
@@ -111,8 +112,21 @@ const SingleCourseWrapper = styled.main`
       }
     }
   }
+  .footer button {
+    background-color: skyblue;
+    border-radius: 25px;
+    width: 300px;
+    padding: 15px 20px;
+  }
   @media screen and (min-width: 768px) {
     width: 95%;
+    .content {
+      .a {
+        .desc p {
+          font-size: 18px;
+        }
+      }
+    }
   }
   @media screen and (min-width: 1024px) {
     .content {
