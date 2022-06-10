@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Courses from "./pages/Courses";
+import SingleCourse from "./pages/SingleCourse";
 // component folder
 import DashboardIndex from "./components/DashboardIndex";
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="courses" element={<Courses />} />
+            <Route path="courses/:param" element={<SingleCourse />} />
             <Route path="profile" element={<Profile />} />
             <Route index element={<DashboardIndex />} />
           </Route>

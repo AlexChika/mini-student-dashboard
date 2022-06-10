@@ -12,9 +12,6 @@ const Dashboard = () => {
   const handleTheme = () => {
     dispatch({ type: "THEME" });
   };
-  useEffect(() => {
-    document.title = "Dashboard | Light Academy";
-  }, []);
   return (
     <DashboardWrapper className="f">
       <section className={`sideBar ${sideBar ? "" : "close"}`}>
@@ -42,6 +39,7 @@ const Dashboard = () => {
         </div>
         <div className="linkCon">
           <Link
+            onClick={() => setSideBar(false)}
             className={isDashboard === "dashboard" ? "active" : ""}
             to="/dashboard"
           >
@@ -50,13 +48,13 @@ const Dashboard = () => {
             </span>
             <span className="text">DashBoard</span>
           </Link>
-          <NavLink to="/dashboard/courses">
+          <NavLink onClick={() => setSideBar(false)} to="/dashboard/courses">
             <span className="icon">
               <i className="bi bi-book-fill"></i>
             </span>
             <span className="text">Courses</span>
           </NavLink>
-          <NavLink to="/dashboard/profile">
+          <NavLink onClick={() => setSideBar(false)} to="/dashboard/profile">
             <span className="icon">
               <i className="bi bi-person-lines-fill"></i>
             </span>
@@ -87,7 +85,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
 const DashboardWrapper = styled.main`
   background-color: ${(props) => props.theme.bg};
   color: white;

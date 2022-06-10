@@ -9,7 +9,7 @@ const course = [
     },
   },
   {
-    id: 1,
+    id: 2,
     name: "Physics",
     details: {
       intro:
@@ -27,7 +27,7 @@ const course = [
     },
   },
   {
-    id: 1,
+    id: 3,
     name: "Mathematics",
     details: {
       intro:
@@ -42,7 +42,7 @@ const course = [
     },
   },
   {
-    id: 1,
+    id: 4,
     name: "Biology",
     details: {
       intro:
@@ -60,7 +60,7 @@ const course = [
     },
   },
   {
-    id: 1,
+    id: 5,
     name: "English Language",
     details: {
       intro:
