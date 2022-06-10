@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import course from "../utils/utils";
+import { course } from "../utils/utils";
 const Courses = () => {
   let array = [1, 2, 3, 4, 5];
   useEffect(() => {

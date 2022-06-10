@@ -105,7 +105,7 @@ const DashboardWrapper = styled.main`
   .navigation {
     position: fixed;
     color: ${(props) => props.theme.color};
-    top: 10px;
+    top: 5px;
     font-size: 30px;
     color: chocolate;
   }

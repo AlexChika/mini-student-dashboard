@@ -88,4 +88,8 @@ const course = [
     },
   },
 ];
-export default course;
+const getCourse = (id) => {
+  let newCourse = course.find((item) => item.id === id);
+  return newCourse;
+};
+export { course, getCourse };

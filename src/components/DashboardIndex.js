@@ -32,6 +32,7 @@ const DashboardIndexWrapper = styled.main`
   display: grid;
   height: 100%;
   place-items: center;
+  margin: 0 auto;
   color: ${(props) => props.theme.color};
   .content {
     flex-direction: column;
@@ -77,17 +78,3 @@ const DashboardIndexWrapper = styled.main`
     }
   }
 `;
-/* border: 2px solid white; 
-  color: ${(props) => props.theme.color};
-
-
-
-*/
-// ${(props) => props.theme.kodecamp}
-// font: italic bold 18px Arial, sans-serif;
-
-/* border: 2px solid red; */
-/* background: url(${require("../Assets/boysmall.png")});
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: right center -100px; */

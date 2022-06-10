@@ -43,13 +43,11 @@ body{
 .second {
   color: chocolate;
 }
-.ashcolor{
-  color: #d9d9d9;
-
+.firstbg {
+   background-color: teal;
 }
-.ashbg{
- background: #d9d9d9;
-
+.secondbg {
+   background-color: chocolate;
 }
 .f{
   display:flex;
