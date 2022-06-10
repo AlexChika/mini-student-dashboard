@@ -92,4 +92,11 @@ const getCourse = (id) => {
   let newCourse = course.find((item) => item.id === id);
   return newCourse;
 };
-export { course, getCourse };
+const statusText = {
+  created1: "Account created successfuly",
+  created2: "Please Login Now",
+  nodetails1: "Please Fill all Fields Correctly",
+  logoutWaiting1: "Please Wait A Moment",
+  logoutSuccess1: "Log Out Successful",
+};
+export { course, getCourse, statusText };

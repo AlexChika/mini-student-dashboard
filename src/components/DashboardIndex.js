@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { GlobalContext } from "../utils/Context";
 const DashboardIndex = () => {
+  const { appState } = GlobalContext();
+  const { currentUser } = appState;
   useEffect(() => {
     document.title = "Dashboard | Light Academy";
   }, []);
@@ -12,7 +15,7 @@ const DashboardIndex = () => {
         <div className="a">
           <div>
             <h1>Welcome Back</h1>
-            <h2>Alex Chika</h2>
+            <h2>{currentUser?.email}</h2>
           </div>
           <div>
             <Link to="/dashboard/courses">Continue Learning</Link>

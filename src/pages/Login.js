@@ -1,57 +1,119 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Nav from "../components/Nav";
+import Form from "../components/Form";
+import Modal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
-// fire Base
-import { app, auth } from "../utils/firebase";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+import { GlobalContext } from "../utils/Context";
+import { statusText } from "../utils/utils";
 const Login = () => {
   const navigate = useNavigate();
-  const provider = new GoogleAuthProvider();
+  const { signup, login, googleSignin } = GlobalContext();
   const [userDetails, setUserDetails] = useState({ email: "", password: "" });
-  const handleLoginDetails = (e) => {
+  const [signupLogin, setSignupLogin] = useState(true);
+  const [modal, setModal] = useState(false);
+  const [status, setStatus] = useState({
+    text1: "",
+    text2: "",
+    loading: false,
+  });
+  const signupOrLoginPage = () => {
+    setSignupLogin(!signupLogin);
+  };
+  const handleLoginDetails = async (e) => {
+    console.log("Clicked");
     e.preventDefault();
-    navigate("/dashboard");
-    return;
-    signInWithEmailAndPassword(auth, userDetails.email, userDetails.password)
-      .then((response) => {
+    if (!userDetails.email || !userDetails.password) {
+      setStatus({
+        text1: statusText.nodetails1,
+        text2: "",
+        loading: false,
+      });
+      setModal(true);
+      return;
+    }
+    if (signupLogin) {
+      setStatus({
+        text1: "Creating Account",
+        text2: "Please Wait",
+        loading: true,
+      });
+      setModal(true);
+      try {
+        const response = await signup(userDetails.email, userDetails.password);
         const user = response.user;
         console.log(user);
-      })
-      .catch((err) => {
-        console.log(err.message);
+        setStatus({
+          text1: statusText.created1,
+          text2: statusText.created2,
+          loading: false,
+        });
+        setModal(true);
+        setSignupLogin(false);
+      } catch (error) {
+        setStatus({
+          text1: error.message,
+          text2: "Please Try Again",
+          loading: false,
+        });
+        setModal(true);
+      }
+      return setUserDetails({ email: "", password: "" });
+    } else {
+      console.log("from sign In");
+      setStatus({
+        text1: "Signing In",
+        text2: "Please Wait",
+        loading: true,
       });
-    console.log(userDetails);
-  };
-  const loginHandler = () => {
-    // navigate("/dashboard");
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        console.log(token);
-        // The signed-in user info.
-        const user = result.user;
+      setModal(true);
+
+      try {
+        const response = await login(userDetails.email, userDetails.password);
+        const user = response.user;
         console.log(user);
-        // ...
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        navigate("/dashboard");
+        setStatus({
+          text1: "",
+          text2: "",
+          loading: false,
+        });
+      } catch (error) {
+        setStatus({
+          text1: error.message,
+          text2: "Please Try Again",
+          loading: false,
+        });
+        setModal(true);
+      }
+      return setUserDetails({ email: "", password: "" });
+    }
+  };
+  const loginHandler = async () => {
+    setStatus({
+      text1: "One Moment Please",
+      text2: "...",
+      loading: true,
+    });
+    setModal(true);
+    try {
+      const result = await googleSignin();
+      setStatus({
+        text1: "",
+        text2: "",
+        loading: false,
       });
-    console.log("Auth with google");
+      setModal(false);
+      navigate("/dashboard");
+    } catch (error) {
+      setStatus({
+        text1: error.message,
+        text2: "Please Try Again",
+        loading: false,
+      });
+      setModal(true);
+    }
+    return;
   };
   useEffect(() => {
     document.title = "Login | Light Academy";
@@ -60,12 +122,22 @@ const Login = () => {
   return (
     <>
       <Nav url={"/"} link={"Home"} />
+      <Modal modal={modal} setModal={setModal}>
+        <div style={{ textAlign: "center", padding: "20px" }}>
+          <h1 className="mb10">{status.text1}</h1>
+          <h2>{status.text2}</h2>
+        </div>
+      </Modal>
       <LoginWrapper className="fcenter">
         <div className="container f">
           <section className="a f">
             <div className="heading">
-              <h1>Student Login</h1>
-              <p>Login To Continue your account</p>
+              <h1>Student {signupLogin ? "Sign Up" : "Login"}</h1>
+              <p>
+                {signupLogin
+                  ? "Create a free account quickly"
+                  : "Login to continue to your account"}
+              </p>
             </div>
             <div className="sticker">
               <img src={require("../Assets/loginicon.png")} alt="login icon" />
@@ -80,57 +152,20 @@ const Login = () => {
               />
               <span className="logoText">Light Academy</span>
             </div>
-            <form onSubmit={handleLoginDetails}>
-              <div className="formControl">
-                <label htmlFor="email">
-                  <input
-                    onChange={(e) =>
-                      setUserDetails({ ...userDetails, email: e.target.value })
-                    }
-                    placeholder="Enter a correct email"
-                    type="email"
-                    required
-                    value={userDetails.email}
-                    id="email"
-                  />
-                  <span>
-                    <img
-                      src={require("../Assets/gmail.png")}
-                      alt="email icon"
-                    />
-                  </span>
-                </label>
-              </div>
-              <div className="formControl">
-                <label htmlFor="password">
-                  <input
-                    onChange={(e) =>
-                      setUserDetails({
-                        ...userDetails,
-                        password: e.target.value,
-                      })
-                    }
-                    placeholder="Please enter correct password"
-                    type="text"
-                    value={userDetails.password}
-                    id="passsword"
-                    required
-                  />
-                  <span>
-                    <img src={require("../Assets/key.png")} alt=" key icon" />
-                  </span>
-                </label>
-              </div>
-              <div className="formControl">
-                <button
-                  onClick={handleLoginDetails}
-                  className="mt30"
-                  type="submit"
-                >
-                  Login
-                </button>
-              </div>
-            </form>
+            {/* Form */}
+            <Form
+              handleLoginDetails={handleLoginDetails}
+              loading={status.loading}
+              userDetails={userDetails}
+              setUserDetails={setUserDetails}
+              signupOrLoginPage={signupOrLoginPage}
+              type={signupLogin ? "SignUp" : "Login"}
+              alternative={
+                signupLogin
+                  ? "Click here to LOGIN instead"
+                  : "Click here to SignUp instead"
+              }
+            />
           </section>
         </div>
         <span style={{ color: "grey", fontSize: "20px" }} className="mt30">
@@ -224,6 +259,13 @@ const LoginWrapper = styled.main`
           background-color: ${(props) => props.theme.kodecamp};
           border-radius: 20px;
           color: white;
+        }
+        a {
+          cursor: pointer;
+          display: block;
+          padding: 10px;
+          color: teal;
+          text-align: center;
         }
       }
     }

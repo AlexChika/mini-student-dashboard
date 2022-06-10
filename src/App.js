@@ -13,7 +13,9 @@ import SingleCourse from "./pages/SingleCourse";
 import DashboardIndex from "./components/DashboardIndex";
 function App() {
   const { appState } = GlobalContext();
+  console.log(appState);
   const { theme } = appState;
+  console.log(theme);
   let appTheme;
   if (theme) {
     appTheme = Theme.Light;
