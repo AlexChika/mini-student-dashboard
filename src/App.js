@@ -28,10 +28,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<DashboardIndex />} />
             <Route path="courses" element={<Courses />} />
             <Route path="courses/:param" element={<SingleCourse />} />
             <Route path="profile" element={<Profile />} />
-            <Route index element={<DashboardIndex />} />
           </Route>
         </Routes>
       </HashRouter>

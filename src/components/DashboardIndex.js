@@ -9,7 +9,7 @@ const DashboardIndex = () => {
   return (
     <DashboardIndexWrapper>
       <section className="content f">
-        {/* <div className="a">
+        <div className="a">
           <div>
             <h1>Welcome Back</h1>
             <h2>Alex Chika</h2>
@@ -21,7 +21,7 @@ const DashboardIndex = () => {
             src={require("../Assets/girlaptop.png")}
             alt=""
           />
-        </div> */}
+        </div>
       </section>
     </DashboardIndexWrapper>
   );
