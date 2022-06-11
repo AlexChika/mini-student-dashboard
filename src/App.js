@@ -1,6 +1,12 @@
 import { GlobalContext } from "./utils/Context";
 import { ThemeProvider } from "styled-components";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import {
+  HashRouter,
+  Routes,
+  Route,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import { Theme, GlobalStyle } from "./utils/themes";
 // pages folder
 import Home from "./pages/Home";
@@ -12,7 +18,9 @@ import SingleCourse from "./pages/SingleCourse";
 // component folder
 import DashboardIndex from "./components/DashboardIndex";
 function App() {
+  // const navigate = useNavigate();
   const { appState } = GlobalContext();
+  const { currentUser } = appState;
   console.log(appState);
   const { theme } = appState;
   console.log(theme);
@@ -29,7 +37,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />}>
+          <Route
+            path="/dashboard"
+            element={
+              currentUser ? <Dashboard /> : <Navigate to="/login" replace />
+            }
+          >
             <Route index element={<DashboardIndex />} />
             <Route path="courses" element={<Courses />} />
             <Route path="courses/:param" element={<SingleCourse />} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { GlobalContext } from "../utils/Context";
 import {
@@ -7,29 +7,19 @@ import {
   useLocation,
   Link,
   useNavigate,
-  Navigate,
 } from "react-router-dom";
 import Logo from "../components/Logo";
 import Modal from "../components/Modal";
 import { statusText } from "../utils/utils";
 const Dashboard = () => {
-  // const navigate = useNavigate();
-  const { logout, appState, dispatch } = GlobalContext();
-  const { currentUser } = appState;
+  const navigate = useNavigate();
+  const { logout, dispatch } = GlobalContext();
   const { pathname } = useLocation();
   const [sideBar, setSideBar] = useState(false);
   const [modal, setModal] = useState(false);
   const [status, setStatus] = useState({ text1: "", text2: "" });
   const url = pathname.split("/");
   let isDashboard = url[url.length - 1];
-  if (!currentUser) {
-    <Navigate to="/login" replace />;
-  }
-  // useEffect(() => {
-  //   if (!currentUser) {
-  //     navigate("/login");
-  //   }
-  // }, []);
   const handleLogout = async () => {
     setStatus({
       text1: statusText.logoutWaiting1,
@@ -110,12 +100,12 @@ const Dashboard = () => {
             </span>
             <span className="text">Profile</span>
           </NavLink>
-          <a style={{ cursor: "pointer" }} onClick={handleLogout}>
+          <button style={{ cursor: "pointer" }} onClick={handleLogout}>
             <span className="icon">
               <i className="bi bi-box-arrow-in-right"></i>
             </span>
             <span className="text">Logout</span>
-          </a>
+          </button>
         </div>
         {/* <button onClick={handleTheme}>click me</button> */}
       </section>
@@ -193,7 +183,8 @@ const DashboardWrapper = styled.main`
       justify-content: space-around;
       height: calc(100% - 212px);
       margin-top: 50px;
-      a {
+      a,
+      button {
         padding: 5px 10px;
         display: block;
         display: flex;
