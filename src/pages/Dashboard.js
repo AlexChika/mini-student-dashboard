@@ -7,12 +7,13 @@ import {
   useLocation,
   Link,
   useNavigate,
+  Navigate,
 } from "react-router-dom";
 import Logo from "../components/Logo";
 import Modal from "../components/Modal";
 import { statusText } from "../utils/utils";
 const Dashboard = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { logout, appState, dispatch } = GlobalContext();
   const { currentUser } = appState;
   const { pathname } = useLocation();
@@ -21,11 +22,14 @@ const Dashboard = () => {
   const [status, setStatus] = useState({ text1: "", text2: "" });
   const url = pathname.split("/");
   let isDashboard = url[url.length - 1];
-  useEffect(() => {
-    if (!currentUser) {
-      navigate("/login");
-    }
-  }, []);
+  if (!currentUser) {
+    <Navigate to="/login" replace />;
+  }
+  // useEffect(() => {
+  //   if (!currentUser) {
+  //     navigate("/login");
+  //   }
+  // }, []);
   const handleLogout = async () => {
     setStatus({
       text1: statusText.logoutWaiting1,
