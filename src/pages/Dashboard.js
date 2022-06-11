@@ -100,12 +100,12 @@ const Dashboard = () => {
             </span>
             <span className="text">Profile</span>
           </NavLink>
-          <button style={{ cursor: "pointer" }} onClick={handleLogout}>
+          <div style={{ cursor: "pointer" }} onClick={handleLogout}>
             <span className="icon">
               <i className="bi bi-box-arrow-in-right"></i>
             </span>
             <span className="text">Logout</span>
-          </button>
+          </div>
         </div>
         {/* <button onClick={handleTheme}>click me</button> */}
       </section>
@@ -184,7 +184,7 @@ const DashboardWrapper = styled.main`
       height: calc(100% - 212px);
       margin-top: 50px;
       a,
-      button {
+      div {
         padding: 5px 10px;
         display: block;
         display: flex;

@@ -1,12 +1,6 @@
 import { GlobalContext } from "./utils/Context";
 import { ThemeProvider } from "styled-components";
-import {
-  HashRouter,
-  Routes,
-  Route,
-  useNavigate,
-  Navigate,
-} from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Theme, GlobalStyle } from "./utils/themes";
 // pages folder
 import Home from "./pages/Home";
@@ -18,7 +12,6 @@ import SingleCourse from "./pages/SingleCourse";
 // component folder
 import DashboardIndex from "./components/DashboardIndex";
 function App() {
-  // const navigate = useNavigate();
   const { appState } = GlobalContext();
   const { currentUser } = appState;
   console.log(appState);
