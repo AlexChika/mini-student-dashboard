@@ -9,6 +9,20 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  // deleteDoc,
+  addDoc,
+  // updateDoc,
+  // getDoc,
+  getDocs,
+  query,
+  where,
+  // onSnapshot,
+} from "firebase/firestore";
 const Context = React.createContext();
 const reducer = (state, action) => {
   if (action.type === "THEME") {
@@ -23,10 +37,10 @@ const reducer = (state, action) => {
   }
   return state;
 };
-//
 const initialState = {
   theme: true, // true for light theme and false for dark theme(dark theme not implemented yet)
   currentUser: "",
+  userDetails: "",
 };
 const AppContextProvider = ({ children }) => {
   // fire base
@@ -41,9 +55,16 @@ const AppContextProvider = ({ children }) => {
   };
   const app = initializeApp(firebaseConfig); //app
   const auth = getAuth(app); //auth
+  const db = getFirestore(app);
+  const colRef = collection(db, "users");
+  const docRef = (docId) => {
+    return doc(db, "users", docId);
+  };
   const [appState, dispatch] = useReducer(reducer, initialState);
   const provider = new GoogleAuthProvider();
-  // functions ...
+  //............ functions ...
+
+  // Auth funcs
   const signup = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -65,9 +86,33 @@ const AppContextProvider = ({ children }) => {
 
     return unsubscribe;
   }, []);
+
+  // firestore funcs
+  const createUser = (data) => {
+    return addDoc(colRef, data);
+  };
+  const overRideUserData = (email, data) => {
+    const docref = docRef(email);
+    return setDoc(docref, data);
+  };
+  const getUser = (email) => {
+    const q = query(colRef, where("email", "==", `${email}`));
+    return getDocs(q);
+  };
   return (
     <Context.Provider
-      value={{ appState, dispatch, logout, auth, login, signup, googleSignin }}
+      value={{
+        appState,
+        dispatch,
+        logout,
+        auth,
+        login,
+        signup,
+        googleSignin,
+        getUser,
+        overRideUserData,
+        createUser,
+      }}
     >
       {children}
     </Context.Provider>

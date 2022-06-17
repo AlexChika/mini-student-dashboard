@@ -55,7 +55,9 @@ const Profile = () => {
               <h3>
                 <span className="identifier">About-Bio :</span> <br />
                 <span className="mt10">
-                  {" I am alex, a dev engineer and developer of javascript"}
+                  {
+                    " hello people we love the whole of you whow are ypu guys doing today just know taht we love the whole of you"
+                  }
                 </span>
               </h3>
               <h3>

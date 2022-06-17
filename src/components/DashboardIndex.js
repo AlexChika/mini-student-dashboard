@@ -1,22 +1,62 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../utils/Context";
+import { useNavigate } from "react-router-dom";
+import Modal from "./Modal";
 const DashboardIndex = () => {
+  const navigate = useNavigate();
   const { appState } = GlobalContext();
-  const { currentUser } = appState;
+  const { currentUser, userDetails } = appState;
+  const [modal, setThisModal] = useState(true);
+  if (userDetails) {
+    setThisModal(false);
+  }
   useEffect(() => {
     document.title = "Dashboard | Light Academy";
   }, []);
-
+  const setModal = () => {
+    setThisModal(true);
+  };
   return (
     <DashboardIndexWrapper>
+      <Modal modal={modal} setModal={setModal}>
+        <div className="modalBody">
+          <div className="heading">
+            <h2>Hello !!! {currentUser.email}</h2>
+          </div>
+          <div className="mt20">
+            <h3>
+              Welcome to <span className="logo">Light Academy</span> we are
+              deligted to have you.
+            </h3>
+          </div>
+          <div className="mt20">
+            <h3>
+              Your profile is Incomplete, Please Click the below buttons to
+              Update or cancel
+            </h3>
+          </div>
+          <div className="mt20">
+            <button
+              onClick={() => navigate("/dashboard/profile")}
+              className="btn"
+            >
+              Update Now
+            </button>
+            <button onClick={() => setThisModal(false)} className="btn">
+              Update Later
+            </button>
+          </div>
+        </div>
+      </Modal>
       <section className="content f">
         <div className="a">
-          <div>
+          <div className="heading">
             <h1>Welcome Back</h1>
-            <h2>{currentUser?.email}</h2>
+            <h2>{userDetails.name || currentUser?.email}</h2>
           </div>
+          <div className="bio">{userDetails.bio || ""}</div>
           <div>
             <Link to="/dashboard/courses">Continue Learning</Link>
           </div>
@@ -59,9 +99,16 @@ const DashboardIndexWrapper = styled.main`
       text-align: center;
       h1 {
         font-size: 40px;
+        color: teal;
       }
       h2 {
         font-size: 30px;
+      }
+      .bio {
+        color: teal;
+        font-style: italic;
+        width: 80%;
+        margin: 0 auto;
       }
       a {
         display: block;
@@ -75,6 +122,22 @@ const DashboardIndexWrapper = styled.main`
     .b {
       height: 45vh;
       width: 100%;
+    }
+  }
+  .modalBody {
+    text-align: center;
+    .heading {
+      color: teal;
+    }
+    .logo {
+      font-family: "Oleo Script", cursive;
+    }
+    .btn {
+      border: 1px solid white;
+      padding: 10px 20px;
+      background-color: teal;
+      border-radius: 15px;
+      margin: 0px 5px;
     }
   }
   @media screen and (min-width: 768px) {
