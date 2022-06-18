@@ -99,4 +99,24 @@ const statusText = {
   logoutWaiting1: "Please Wait A Moment",
   logoutSuccess1: "Log Out Successful",
 };
-export { course, getCourse, statusText };
+const isUser = async (email, getUser, dispatch) => {
+  try {
+    const snapshot = await getUser(email);
+    const users = snapshot.docs;
+    console.log(users);
+    if (users.length > 0) {
+      const userData = {
+        ...users[0].data(),
+        id: users[0].id,
+      };
+      dispatch({ type: "USER_EXIST", payload: userData });
+    } else {
+      dispatch({ type: "USER_UNDEFINED" });
+    }
+    return { success: true };
+  } catch (error) {
+    console.log(error.message);
+    return { success: false };
+  }
+};
+export { course, getCourse, statusText, isUser };

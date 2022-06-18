@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { GlobalContext } from "./utils/Context";
 import { ThemeProvider } from "styled-components";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -13,16 +14,18 @@ import SingleCourse from "./pages/SingleCourse";
 import DashboardIndex from "./components/DashboardIndex";
 function App() {
   const { appState } = GlobalContext();
-  const { currentUser } = appState;
-  console.log(appState);
-  const { theme } = appState;
-  console.log(theme);
-  let appTheme;
-  if (theme) {
-    appTheme = Theme.Light;
-  } else {
-    appTheme = Theme.Dark;
-  }
+  // const { currentUser } = appState;
+  const currentUser = JSON.parse(localStorage.getItem("user"));
+  console.log(currentUser);
+  let appTheme = Theme.Light;
+  // themeing
+  // const { theme } = appState;
+  // console.log(theme);
+  // if (theme) {
+  //   appTheme = Theme.Light;
+  // } else {
+  //   appTheme = Theme.Dark;
+  // }
   return (
     <ThemeProvider theme={appTheme}>
       <GlobalStyle />

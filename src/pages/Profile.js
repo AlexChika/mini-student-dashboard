@@ -1,27 +1,42 @@
 import React, { useEffect, useRef, useState } from "react";
+import { isUser } from "../utils/utils";
 import styled from "styled-components";
 import { GlobalContext } from "../utils/Context";
 const Profile = () => {
-  const { appState } = GlobalContext();
-  const { currentUser } = appState;
+  const { appState, overRideUserData, createUser, getUser, dispatch } =
+    GlobalContext();
+  const { currentUser, userDetails } = appState;
+  const [updateModal, setUpdateModal] = useState(!userDetails);
   const [inputDetails, setInputDetails] = useState({
     firstname: "",
     surname: "",
-    email: "",
+    email: currentUser.email,
     dob: "",
     phone: "",
-    bio: "",
   });
   const bioRef = useRef(null);
   const btnRef = useRef(null);
   const errorRef = useRef(null);
+  const closeUpdateModal = () => {
+    if (!userDetails) return;
+    setUpdateModal(false);
+  };
   const handleUserDetails = (e) => {
+    setInputDetails({
+      ...inputDetails,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleUpdateUserDetails = async (e) => {
     e.preventDefault();
-    let inputObject = {};
     const bioInput = bioRef.current;
     const btn = btnRef.current;
-    if (input.value.trim() === "") {
-      errorRef.current.textContent = "Please fill all fields";
+    for (const key in inputDetails) {
+      if (inputDetails[key].trim() === "") {
+        console.log(key, "empty");
+        errorRef.current.textContent = "Please fill all fields";
+        return false;
+      }
     }
     if (
       bioInput.textContent.trim() === "" ||
@@ -30,33 +45,60 @@ const Profile = () => {
       bioInput.textContent = "Please fill this field";
       return;
     }
-    inputs.forEach((input) => {
-      inputObject = {
-        ...inputObject,
-        [input.name]: input.value,
-        bio: bioInput.textContent,
-      };
-    });
+    let inputObject = {
+      ...inputDetails,
+      bio: bioInput.textContent,
+    };
     btn.textContent = "Please wait";
     errorRef.current.textContent = "";
     console.log(inputObject);
-    return;
-    // await createUser(inputObject.email, inputObject);
-    // btn.textContent = "User added";
-    // setTimeout(() => {
-    //   btn.textContent = "Submit";
-    //   createUserForm.reset();
-    //   bioInput.textContent = "";
-    // }, 2000);
+    // at this point all inputs are complete
+    // flags
+    if (userDetails) {
+      await overRideUserData(userDetails.id, inputObject);
+      const { success } = await isUser(currentUser.email, getUser, dispatch);
+      btn.textContent = "Profile updated";
+      setInputDetails({
+        firstname: "",
+        surname: "",
+        email: currentUser.email,
+        dob: "",
+        phone: "",
+      });
+      bioInput.textContent = "";
+    } else {
+      await createUser(inputObject);
+      const { success } = await isUser(currentUser.email, getUser, dispatch);
+      if (success) {
+        btn.textContent = "Profile updated";
+        setInputDetails({
+          firstname: "",
+          surname: "",
+          email: currentUser.email,
+          dob: "",
+          phone: "",
+        });
+        bioInput.textContent = "";
+      } else {
+      }
+      return;
+    }
+    return setTimeout(() => {
+      btn.textContent = "Submit";
+    }, 2000);
   };
   useEffect(() => {
     document.title = "Profile | Light Academy";
   }, []);
+  useEffect(() => {
+    setUpdateModal(!userDetails);
+  }, [userDetails]);
+
   return (
     <>
-      <UpdateProfileWrapper>
+      <UpdateProfileWrapper updateModal={updateModal}>
         <div className="form-body">
-          <form onSubmit={handleUserDetails} id="createUserForm">
+          <form onSubmit={handleUpdateUserDetails} id="createUserForm">
             <div className="heading mb20">
               <h2>Update Profile</h2>
               <small style={{ color: "tomato" }} ref={errorRef}></small>
@@ -65,6 +107,8 @@ const Profile = () => {
               <label htmlFor="firstname">First Name</label>
               <input
                 required={true}
+                value={inputDetails.firstname}
+                onChange={handleUserDetails}
                 type="text"
                 name="firstname"
                 id="firstname"
@@ -72,19 +116,47 @@ const Profile = () => {
             </div>
             <div className="formControl">
               <label htmlFor="surname">Sur Name</label>
-              <input required={true} type="text" name="surname" id="surname" />
+              <input
+                value={inputDetails.surname}
+                onChange={handleUserDetails}
+                required={true}
+                type="text"
+                name="surname"
+                id="surname"
+              />
             </div>
             <div className="formControl">
               <label htmlFor="email">Email</label>
-              <input required={true} type="email" name="email" id="email" />
+              <input
+                value={inputDetails.email}
+                required={true}
+                type="email"
+                name="email"
+                id="email"
+                readOnly
+              />
             </div>
             <div className="formControl">
               <label htmlFor="dob">Date of Birth </label>
-              <input required={true} type="date" name="dob" id="dob" />
+              <input
+                value={inputDetails.dob}
+                onChange={handleUserDetails}
+                required={true}
+                type="date"
+                name="dob"
+                id="dob"
+              />
             </div>
             <div className="formControl">
               <label htmlFor="phone">Phone </label>
-              <input required={true} type="number" name="phone" id="phone" />
+              <input
+                value={inputDetails.phone}
+                onChange={handleUserDetails}
+                required={true}
+                type="number"
+                name="phone"
+                id="phone"
+              />
             </div>
             <div className="formControl">
               <label htmlFor="bio">Bio</label>
@@ -98,6 +170,9 @@ const Profile = () => {
             <button ref={btnRef} className="btn" type="submit">
               Submit
             </button>
+            <div className="cancel">
+              <span onClick={closeUpdateModal}>Cancel</span>
+            </div>
           </form>
         </div>
       </UpdateProfileWrapper>
@@ -106,7 +181,7 @@ const Profile = () => {
           <div className="container">
             <div className="heading f">
               <h1>
-                Welcome <span> {"Alex"}...</span>
+                Welcome <span>{userDetails.firstname || "User"}...</span>
               </h1>
               <div className="imgCon">
                 <img
@@ -121,11 +196,11 @@ const Profile = () => {
               <div className="names mt20">
                 <h3>
                   <span className="identifier">First Name :</span>
-                  <span>{" Alex"}</span>
+                  <span>{userDetails.firstname || "First name"}</span>
                 </h3>
                 <h3>
                   <span className="identifier">Second Name :</span>
-                  <span>{" Chika"}</span>
+                  <span>{userDetails.surname || " Second name"}</span>
                 </h3>
               </div>
             </div>
@@ -134,11 +209,11 @@ const Profile = () => {
               <div className="names mt20">
                 <h3>
                   <span className="identifier">Email :</span>
-                  <span>{" mcluckey1@gmail.com"}</span>
+                  <span>{currentUser.email || " User email"}</span>
                 </h3>
                 <h3>
                   <span className="identifier">Phone :</span>
-                  <span>{" 09024783759"}</span>
+                  <span>{userDetails.phone || " User phone"}</span>
                 </h3>
               </div>
             </div>
@@ -148,19 +223,21 @@ const Profile = () => {
                 <h3>
                   <span className="identifier">About-Bio :</span> <br />
                   <span className="mt10">
-                    {
-                      " hello people we love the whole of you whow are ypu guys doing today just know taht we love the whole of you"
-                    }
+                    {userDetails.bio || " Say a few things about yourself"}
                   </span>
                 </h3>
                 <h3>
                   <span className="identifier">D.O.B :</span> <br />
-                  <span className="mt10">{" 2023 12 1999"}</span>
+                  <span className="mt10">
+                    {userDetails.dob || " Year of Birth"}
+                  </span>
                 </h3>
               </div>
             </div>
           </div>
-          <button className="btn">Update profile</button>
+          <button onClick={() => setUpdateModal(true)} className="btn">
+            Update profile
+          </button>
         </section>
       </ProfileWrapper>
     </>
@@ -169,8 +246,7 @@ const Profile = () => {
 
 export default Profile;
 const UpdateProfileWrapper = styled.main`
-  /* display: ${({ modal }) => (modal ? "block" : "none")}; */
-  /* ....... */
+  display: ${({ updateModal }) => (updateModal ? "block" : "none")};
   position: fixed;
   top: 0;
   left: 0;
@@ -237,6 +313,16 @@ const UpdateProfileWrapper = styled.main`
       margin: 0 auto;
       background-color: tomato !important;
       text-align: center;
+    }
+    .cancel {
+      color: tomato;
+      text-align: center;
+      margin-top: 10px;
+      padding: 5px;
+      span {
+        cursor: pointer;
+        padding: 5px;
+      }
     }
   }
   @media screen and (min-width: 576px) {

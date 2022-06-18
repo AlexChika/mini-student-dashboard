@@ -1,4 +1,5 @@
 import React, { useReducer, useContext, useEffect } from "react";
+import { isUser } from "./utils";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -30,10 +31,19 @@ const reducer = (state, action) => {
   }
   if (action.type === "SET_USER") {
     const user = action.payload;
+    localStorage.setItem("user", JSON.stringify(user));
     return { ...state, currentUser: user };
   }
   if (action.type === "NO_USER") {
+    localStorage.removeItem("user");
     return { ...state, currentUser: "" };
+  }
+  // settung user details
+  if (action.type === "USER_EXIST") {
+    return { ...state, userDetails: action.payload };
+  }
+  if (action.type === "USER_UNDEFINED") {
+    return { ...state, userDetails: "" };
   }
   return state;
 };
@@ -56,9 +66,9 @@ const AppContextProvider = ({ children }) => {
   const app = initializeApp(firebaseConfig); //app
   const auth = getAuth(app); //auth
   const db = getFirestore(app);
-  const colRef = collection(db, "users");
+  const colRef = collection(db, "students");
   const docRef = (docId) => {
-    return doc(db, "users", docId);
+    return doc(db, "students", docId);
   };
   const [appState, dispatch] = useReducer(reducer, initialState);
   const provider = new GoogleAuthProvider();
@@ -83,7 +93,6 @@ const AppContextProvider = ({ children }) => {
         dispatch({ type: "SET_USER", payload: user });
       }
     });
-
     return unsubscribe;
   }, []);
 
@@ -91,14 +100,17 @@ const AppContextProvider = ({ children }) => {
   const createUser = (data) => {
     return addDoc(colRef, data);
   };
-  const overRideUserData = (email, data) => {
-    const docref = docRef(email);
+  const overRideUserData = (id, data) => {
+    const docref = docRef(id);
     return setDoc(docref, data);
   };
   const getUser = (email) => {
     const q = query(colRef, where("email", "==", `${email}`));
     return getDocs(q);
   };
+  useEffect(() => {
+    isUser(appState.currentUser.email, getUser, dispatch);
+  }, [appState.currentUser]);
   return (
     <Context.Provider
       value={{

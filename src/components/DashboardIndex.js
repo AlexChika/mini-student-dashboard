@@ -8,19 +8,19 @@ const DashboardIndex = () => {
   const navigate = useNavigate();
   const { appState } = GlobalContext();
   const { currentUser, userDetails } = appState;
-  const [modal, setThisModal] = useState(true);
-  if (userDetails) {
-    setThisModal(false);
-  }
+  const [detailsModal, setDetailsModal] = useState(!userDetails);
   useEffect(() => {
     document.title = "Dashboard | Light Academy";
   }, []);
-  const setModal = () => {
-    setThisModal(true);
+  const setCloseDetailsModal = () => {
+    setDetailsModal(true);
   };
+  useEffect(() => {
+    setDetailsModal(!userDetails);
+  }, [userDetails]);
   return (
     <DashboardIndexWrapper>
-      <Modal modal={modal} setModal={setModal}>
+      <Modal modal={detailsModal} setModal={setCloseDetailsModal}>
         <div className="modalBody">
           <div className="heading">
             <h2>Hello !!! {currentUser.email}</h2>
@@ -44,7 +44,7 @@ const DashboardIndex = () => {
             >
               Update Now
             </button>
-            <button onClick={() => setThisModal(false)} className="btn">
+            <button onClick={() => setDetailsModal(false)} className="btn">
               Update Later
             </button>
           </div>
@@ -54,7 +54,7 @@ const DashboardIndex = () => {
         <div className="a">
           <div className="heading">
             <h1>Welcome Back</h1>
-            <h2>{userDetails.name || currentUser?.email}</h2>
+            <h2>{userDetails.firstname || currentUser?.email}</h2>
           </div>
           <div className="bio">{userDetails.bio || ""}</div>
           <div>

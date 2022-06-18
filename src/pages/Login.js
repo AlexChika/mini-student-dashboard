@@ -5,10 +5,10 @@ import Form from "../components/Form";
 import Modal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../utils/Context";
-import { statusText } from "../utils/utils";
+import { statusText, isUser } from "../utils/utils";
 const Login = () => {
   const navigate = useNavigate();
-  const { signup, login, googleSignin } = GlobalContext();
+  const { dispatch, signup, login, googleSignin, getUser } = GlobalContext();
   const [userDetails, setUserDetails] = useState({ email: "", password: "" });
   const [signupLogin, setSignupLogin] = useState(true);
   const [modal, setModal] = useState(false);
@@ -67,17 +67,21 @@ const Login = () => {
         loading: true,
       });
       setModal(true);
-
       try {
         const response = await login(userDetails.email, userDetails.password);
         const user = response.user;
         console.log(user);
-        navigate("/dashboard");
-        setStatus({
-          text1: "",
-          text2: "",
-          loading: false,
-        });
+        const { success } = await isUser(user.email, getUser, dispatch);
+        if (success) {
+          navigate("/dashboard");
+          setStatus({
+            text1: "",
+            text2: "",
+            loading: false,
+          });
+        } else {
+          throw new Error("Could not reach database");
+        }
       } catch (error) {
         setStatus({
           text1: error.message,
@@ -97,14 +101,20 @@ const Login = () => {
     });
     setModal(true);
     try {
-      const result = await googleSignin();
-      setStatus({
-        text1: "",
-        text2: "",
-        loading: false,
-      });
-      setModal(false);
-      navigate("/dashboard");
+      const response = await googleSignin();
+      const user = response.user;
+      const { success } = await isUser(user.email, getUser, dispatch);
+      if (success) {
+        setStatus({
+          text1: "",
+          text2: "",
+          loading: false,
+        });
+        setModal(false);
+        navigate("/dashboard");
+      } else {
+        throw new Error("Could not reach database");
+      }
     } catch (error) {
       setStatus({
         text1: error.message,
