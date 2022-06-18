@@ -223,7 +223,7 @@ const DashboardWrapper = styled.main`
       #a080a0,
       ${(props) => props.theme.kodecamp}
     ); */
-    overflow-y: auto;
+    // overflow-y: auto;
     width: 100%;
   }
   @media screen and (min-width: 548px) {
