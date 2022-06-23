@@ -89,7 +89,6 @@ const Profile = () => {
   };
   useEffect(() => {
     document.title = "Profile | Light Academy";
-    console.log(currentUser);
   }, []);
   useEffect(() => {
     setUpdateModal(!userDetails);
@@ -385,7 +384,7 @@ const ProfileWrapper = styled.main`
         color: teal;
       }
       .imgCon {
-        height: 100px;
+        height: 80px;
         border-radius: 50%;
         overflow: hidden;
       }
