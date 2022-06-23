@@ -89,6 +89,7 @@ const Profile = () => {
   };
   useEffect(() => {
     document.title = "Profile | Light Academy";
+    console.log(currentUser);
   }, []);
   useEffect(() => {
     setUpdateModal(!userDetails);
@@ -186,7 +187,9 @@ const Profile = () => {
               <div className="imgCon">
                 <img
                   className="fwh"
-                  src={require("../Assets/girlaptop.png")}
+                  src={
+                    currentUser.photoURL || require("../Assets/girlaptop.png")
+                  }
                   alt=""
                 />
               </div>
@@ -383,6 +386,8 @@ const ProfileWrapper = styled.main`
       }
       .imgCon {
         height: 100px;
+        border-radius: 50%;
+        overflow: hidden;
       }
     }
     .info,
